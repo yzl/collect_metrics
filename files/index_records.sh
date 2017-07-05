@@ -4,7 +4,7 @@ source /home/centos/instance_info
 
 hostname=`hostname`
 
-es_5_minute_json='{"size":0,"aggs":{"last_5_mins":{"filter":{"range":{"hitTime":{"gte":"now-5m","lte":"now"}}},"aggs":{"tps":{"date_histogram":{"field":"hitTime","interval":"second"}}}}}}'
+es_5_minute_json='{"query":{"range":{"end_time":{"gte":"now-5m","lt":"now"}}}}'
 
 node_index=`curl -s -XGET http://$hostname:9200/_cat/indices | grep 'insights-20' | sort -r | head -1 | awk '{ print $3 }'`
 compliance_index=`curl -s -XGET http://$hostname:9200/_cat/indices | grep 'compliance-20' | sort -r | head -1 | awk '{ print $3 }'`
