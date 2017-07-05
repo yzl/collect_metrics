@@ -9,6 +9,18 @@ es_5_minute_json='{"size":0,"aggs":{"last_5_mins":{"filter":{"range":{"hitTime":
 node_index=`curl -s -XGET http://$hostname:9200/_cat/indices | grep 'insights-20' | sort -r | head -1 | awk '{ print $3 }'`
 compliance_index=`curl -s -XGET http://$hostname:9200/_cat/indices | grep 'compliance-20' | sort -r | head -1 | awk '{ print $3 }'`
 
+if [ -z $node_index ]
+then
+echo "no insights index found"
+exit 1
+fi
+
+if [ -z $node_index ]
+then
+echo "no compliance index found"
+exit 1
+fi
+
 node_records=`curl -s -XGET http://$hostname:9200/$node_index/_count -d $es_5_minute_json | /home/centos/jq-linux64 '.count'`
 compliance_records=`curl -s -XGET http://$hostname:9200/$compliance_index/_count -d $es_5_minute_json | /home/centos/jq-linux64 '.count'`
 total_records=$(awk "BEGIN {print $node_records+$compliance_records; exit}")
