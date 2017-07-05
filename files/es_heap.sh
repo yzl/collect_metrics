@@ -15,7 +15,7 @@ mapfile -t es_metrics <<<"$command"
 # echo "gc_young_collection_count: ${es_metrics[4]}"
 # echo "gc_young_collection_time_in_millis: ${es_metrics[5]}"
 
-per_host_options="--namespace AWS/EC2 --region us-west-2 --dimensions TestId=TestMetricInput,Instance=$instance"
+per_host_options="--namespace AWS/EC2 --region us-west-2 --dimensions TestId=$test_id,Instance=$instance"
 
 aws cloudwatch put-metric-data $per_host_options --metric-name HeapUsedInBytes --unit Bytes --value ${es_metrics[0]}
 aws cloudwatch put-metric-data $per_host_options --metric-name HeapUsedPercent --unit Percent --value ${es_metrics[1]}
