@@ -33,3 +33,20 @@ cron 'disk_queue_size' do
   home '/home/centos'
   command '/home/centos/disk_queue_size.sh'
 end
+
+cookbook_file '/home/centos/index_records.sh' do
+ source 'index_records.sh'
+ user 'centos'
+ mode '755'
+ action :create
+end
+
+cron 'index_records' do
+  minute '*/5'
+  hour '*'
+  weekday '*'
+  month '*'
+  user 'centos'
+  home '/home/centos'
+  command '/home/centos/index_records.sh'
+end
