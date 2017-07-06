@@ -15,3 +15,19 @@ cron 'data_collector_queue_length' do
   user 'root'
   command '/home/centos/data_collector_queue_length.sh' 
 end
+
+cookbook_file '/home/centos/es_post_times.sh' do
+ source 'es_post_times.sh'
+ user 'centos'
+ mode '755'
+ action :create
+end
+
+cron 'es_post_times' do
+  minute '*/5'
+  hour '*'
+  weekday '*'
+  month '*'
+  user 'root'
+  command '/home/centos/es_post_times.sh'
+end
