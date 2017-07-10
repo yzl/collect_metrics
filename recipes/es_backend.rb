@@ -41,6 +41,13 @@ cookbook_file '/home/centos/index_records.sh' do
  action :create
 end
 
+cookbook_file '/home/centos/index_records.py' do
+ source 'index_records.py'
+ user 'centos'
+ mode '755'
+ action :create
+end
+
 cron 'index_records' do
   minute '*/5'
   hour '*'
