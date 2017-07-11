@@ -10,8 +10,11 @@ while read -r line; do
   parent_pid=`printf "$line" | awk '{print $2}'`
   pid=`ps -Af | grep $parent_pid | grep delivery | grep -v root | awk '{print $2}'` 
   worker_heap=`su delivery -c "/opt/delivery/embedded/jre/bin/jcmd $pid GC.class_histogram" | grep Total | awk '{print $3}'`
+  worker_heap_bytes=$(($worker_heap/8))
   total=$(($total+$worker_heap))
- aws cloudwatch put-metric-data $per_host_options --metric-name LogstashHeap_${worker} --unit Bits --value ${worker_heap}
+  aws cloudwatch put-metric-data $per_host_options --metric-name LogstashHeap_${worker} --unit Bytes --value ${worker_heap_bytes}
 done <<< "$pids"
 
-aws cloudwatch put-metric-data $per_host_options --metric-name TotalLogstashHeap --unit Bits --value ${total}
+total_heap_bytes=$(($total/8))
+
+aws cloudwatch put-metric-data $per_host_options --metric-name TotalLogstashHeap --unit Bytes --value ${total_heap_bytes}
