@@ -57,3 +57,20 @@ cron 'index_records' do
   home '/home/centos'
   command '/home/centos/index_records.sh'
 end
+
+cookbook_file '/home/centos/cluster_health.sh' do
+ source 'cluster_health.sh'
+ user 'centos'
+ mode '755'
+ action :create
+end
+
+cron 'cluster_health' do
+  minute '*/5'
+  hour '*'
+  weekday '*'
+  month '*'
+  user 'centos'
+  home '/home/centos'
+  command '/home/centos/cluster_health.sh'
+end
