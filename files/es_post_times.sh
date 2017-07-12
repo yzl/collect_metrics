@@ -17,8 +17,8 @@ command=`grep bulk /var/log/delivery/nginx/es_proxy.access.log | grep POST | awk
 mapfile -t es_response_time <<<"$command"
 # echo "request_time: ${es_response_time[0]}"
 # echo "upstream_response_time: ${es_response_time[1]}"
-aws cloudwatch put-metric-data $per_host_options --metric-name 5MinuteAveragePostRequestTime --unit Milliseconds --value ${es_response_time[0]}
-aws cloudwatch put-metric-data $per_host_options --metric-name 5MinuteAveragePostUpstreamResponseTime --unit Milliseconds --value ${es_response_time[1]}
+aws cloudwatch put-metric-data $per_host_options --metric-name 5MinuteAveragePostRequestTime --unit Seconds --value ${es_response_time[0]}
+aws cloudwatch put-metric-data $per_host_options --metric-name 5MinuteAveragePostUpstreamResponseTime --unit Seconds --value ${es_response_time[1]}
 
 # Count non-200 return statuses
 error_count=`grep bulk /var/log/delivery/nginx/es_proxy.access.log | grep POST | awk '{split($0, field, "\"") ; print field[12]}' | grep -cv "^2"`
